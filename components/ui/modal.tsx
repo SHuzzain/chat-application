@@ -8,10 +8,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DialogContentProps,
+  DialogDescriptionProps,
+  DialogProps,
+  DialogTitleProps,
+} from "@radix-ui/react-dialog";
 
 interface ModalProps {
-  title: string;
-  description: string;
+  title: string | React.ReactNode;
+  componentStyle?: {
+    main?: DialogProps;
+    header?: React.HTMLAttributes<HTMLDivElement>;
+    content?: DialogContentProps;
+    title?: DialogTitleProps;
+    description?: DialogDescriptionProps;
+  };
+  description: string | React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
@@ -23,6 +36,7 @@ export const Modal: FC<ModalProps> = ({
   isOpen,
   onClose,
   title,
+  componentStyle,
 }) => {
   const handleChange = (open: boolean) => {
     if (!open) {
@@ -30,11 +44,13 @@ export const Modal: FC<ModalProps> = ({
     }
   };
   return (
-    <Dialog open={isOpen} onOpenChange={handleChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+    <Dialog {...componentStyle?.main} open={isOpen} onOpenChange={handleChange}>
+      <DialogContent {...componentStyle?.content}>
+        <DialogHeader {...componentStyle?.header}>
+          <DialogTitle {...componentStyle?.title}>{title}</DialogTitle>
+          <DialogDescription {...componentStyle?.description}>
+            {description}
+          </DialogDescription>
         </DialogHeader>
         {children}
       </DialogContent>
