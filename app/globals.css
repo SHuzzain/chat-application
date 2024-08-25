@@ -9,6 +9,8 @@ body {
 
 @layer base {
   :root {
+    --sidebar: 220, 13%, 95%;
+    --aside-nav: 216, 10%, 90%;
     --mainBodyClr: 0, 0%, 100%;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -38,6 +40,8 @@ body {
   }
 
   .dark {
+    --sidebar: 220, 7%, 18%;
+    --aside-nav: 225, 6.25%, 12.55%;
     --mainBodyClr: 223, 7%, 21%;
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;

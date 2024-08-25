@@ -21,6 +21,8 @@ const config = {
     },
     extend: {
       colors: {
+        sidebar: "hsl(var(--sidebar))",
+        aside_nav: "hsl(var(--aside-nav))",
         main_body_clr: "hsl(var(--mainBodyClr))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

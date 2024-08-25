@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ServerModal from "../modals/modal-server";
+
+import ServerModal from "@/components/modals/modal-server";
+import InviteModal from "@/components/modals/modal-invite";
 
 type Props = {};
 
@@ -11,7 +13,12 @@ function ServerModalProvider({}: Props) {
   }, []);
 
   if (!isMounted) return null;
-  return <ServerModal />;
+  return (
+    <>
+      <ServerModal />
+      <InviteModal />
+    </>
+  );
 }
 
 export default ServerModalProvider;

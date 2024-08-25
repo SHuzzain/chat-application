@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -28,9 +28,9 @@ import { serverSchema } from "@/lib/zod-schema/schema";
 
 function ServerModal() {
   const serverModal = useServerModal();
+  const server = serverModal.data?.server;
   const router = useRouter();
   const [loadind, setLoading] = useState(false);
-
   const form = useForm<z.infer<typeof serverSchema>>({
     resolver: zodResolver(serverSchema),
     defaultValues: {
@@ -39,11 +39,31 @@ function ServerModal() {
     },
   });
 
+  const serverInfo = {
+    message: server
+      ? "Server updated successfully"
+      : "Server created successfully",
+    button: server ? "Save" : "Create",
+  };
+
+  useEffect(() => {
+    if (server) {
+      const { name, imageUrl } = server;
+      form.setValue("name", name);
+      form.setValue("imageUrl", imageUrl);
+    }
+    return () => form.reset();
+  }, [server]);
+
   const onSumbit = async (data: z.infer<typeof serverSchema>) => {
     try {
       setLoading(true);
-      await axios.post("/api/servers", data);
-      toast.success("Server created successfully");
+      if (server) {
+        await axios.patch(`/api/servers/${server.id}`, data);
+      } else {
+        await axios.post("/api/servers", data);
+      }
+      toast.success(serverInfo.message);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong.");
@@ -114,7 +134,7 @@ function ServerModal() {
           />
           <DialogFooter className="bg-gray-200 px-6 py-4">
             <Button type="submit" disabled={loadind} variant={"primary"}>
-              Create
+              {serverInfo.button}
             </Button>
           </DialogFooter>
         </form>

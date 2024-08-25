@@ -21,10 +21,16 @@ const FileUpload = React.forwardRef<HTMLDivElement, Props>(
     if (fileType && fileType !== "pdf") {
       return (
         <div className="relative w-20 h-20">
-          <Image fill src={value} alt="upload" className="rounded-full" />
+          <Image
+            fill
+            src={value}
+            alt="upload"
+            className="rounded-full object-cover"
+          />
           <Button
             variant={"destructive"}
             size={"sm"}
+            onClick={() => onChange("")}
             className="top-0 right-0 z-10 absolute shadow-sm p-1 rounded-full w-6 h-6"
             type="button"
           >
