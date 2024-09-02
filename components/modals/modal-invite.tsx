@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 import axios from "axios";
 
-import { useInviteModal } from "@/store/server-slice";
+import { useModal } from "@/store/server-slice";
 import useOrigin from "@/hook/use-origin";
 
 import OnCopyButton from "../common/on-copy";
@@ -17,10 +17,12 @@ import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 
 function InviteModal() {
-  const inviteModal = useInviteModal();
+  const { isOpen, onClose, onOpen, data, type } = useModal();
   const origin = useOrigin();
 
-  const server = inviteModal.data?.server;
+  const server = data?.server;
+
+  const ModalIsOpen = isOpen && type == "invite";
 
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +34,7 @@ function InviteModal() {
       const response = await axios.patch(
         `/api/servers/${server?.id}/invite-code`
       );
-      inviteModal.onOpen({ server: response.data });
+      onOpen("invite", { server: response.data });
     } catch (error) {
       console.log(error);
       toast.error("Failed to generate link");
@@ -59,8 +61,8 @@ function InviteModal() {
       }}
       title="Invite Friends"
       description=""
-      isOpen={inviteModal.isOpen}
-      onClose={inviteModal.onClose}
+      isOpen={ModalIsOpen}
+      onClose={onClose}
     >
       <div className="p-6">
         <Label

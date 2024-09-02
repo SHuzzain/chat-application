@@ -20,15 +20,15 @@ import toast from "react-hot-toast";
 import { DialogFooter } from "../ui/dialog";
 import FileUpload from "../ui/file-upload";
 
-import { useServerModal } from "@/store/server-slice";
+import { useModal } from "@/store/server-slice";
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { serverSchema } from "@/lib/zod-schema/schema";
 
 function ServerModal() {
-  const serverModal = useServerModal();
-  const server = serverModal.data?.server;
+  const { isOpen, onOpen, type, data, onClose } = useModal();
+  const server = data?.server;
   const router = useRouter();
   const [loadind, setLoading] = useState(false);
   const form = useForm<z.infer<typeof serverSchema>>({
@@ -38,6 +38,8 @@ function ServerModal() {
       imageUrl: "",
     },
   });
+
+  const serverModalIsOpen = isOpen && type === "createServer";
 
   const serverInfo = {
     message: server
@@ -70,7 +72,7 @@ function ServerModal() {
       console.log(error);
     } finally {
       form.reset();
-      serverModal.onClose();
+      onClose();
       setLoading(false);
     }
   };
@@ -92,8 +94,8 @@ function ServerModal() {
       }}
       title="Customize your server"
       description="Give your server a personality with a name and an image. You can always change it later."
-      isOpen={serverModal.isOpen}
-      onClose={serverModal.onClose}
+      isOpen={serverModalIsOpen}
+      onClose={onClose}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSumbit)} className="space-y-8">

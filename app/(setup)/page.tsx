@@ -1,13 +1,13 @@
 "use client";
 
-import { useServerModal } from "@/store/server-slice";
+import { useModal } from "@/store/server-slice";
 import { useEffect } from "react";
 
 export default function SetUpPage() {
-  const { onOpen, isOpen } = useServerModal();
+  const { onOpen, isOpen } = useModal();
   useEffect(() => {
     if (!isOpen) {
-      onOpen();
+      onOpen("createServer");
     }
   }, [onOpen, isOpen]);
   return null;

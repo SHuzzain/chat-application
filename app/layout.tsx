@@ -4,8 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/provider/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
-import ServerModalProvider from "@/components/provider/serverModal-provider";
-import ToastProvider from "@/components/provider/toast-provider";
+import WrapModalProvider from "@/components/provider/wrap-modal-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,8 +31,7 @@ export default function RootLayout({
           >
             {children}
 
-            <ServerModalProvider />
-            <ToastProvider />
+            <WrapModalProvider />
           </ThemeProvider>
         </body>
       </html>

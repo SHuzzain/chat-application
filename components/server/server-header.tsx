@@ -18,7 +18,7 @@ import {
   Users,
 } from "lucide-react";
 import { ExitIcon } from "@radix-ui/react-icons";
-import { useInviteModal, useServerModal } from "@/store/server-slice";
+import { useModal } from "@/store/server-slice";
 
 type Props = {
   server: ServerWithMemberProfile;
@@ -26,8 +26,7 @@ type Props = {
 };
 
 const ServerHeader = ({ server, role }: Props) => {
-  const inviteModal = useInviteModal();
-  const serverModal = useServerModal();
+  const { onOpen } = useModal();
 
   const isAdmin = role === MemberRole.ADMIN;
   const isModerator = isAdmin || role === MemberRole.MODERATOR;
@@ -41,7 +40,7 @@ const ServerHeader = ({ server, role }: Props) => {
       <DropdownMenuContent className="w-56 font-medium text-black text-xs dark:text-neutral-400">
         {isModerator && (
           <DropdownMenuItem
-            onClick={() => inviteModal.onOpen({ server })}
+            onClick={() => onOpen("invite", { server })}
             className="px-3 py-2 text-indigo-600 dark:text-indigo-400 cursor-pointer"
           >
             Invite People
@@ -51,14 +50,17 @@ const ServerHeader = ({ server, role }: Props) => {
         {isAdmin && (
           <>
             <DropdownMenuItem
-              onClick={() => serverModal.onOpen({ server })}
+              onClick={() => onOpen("createServer", { server })}
               className="px-3 py-2 text-sm cursor-pointer"
             >
               Server Setting
               <Settings className="ml-auto size-4" />
             </DropdownMenuItem>
 
-            <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => onOpen("member", { server })}
+              className="px-3 py-2 text-sm cursor-pointer"
+            >
               Manage Mambers
               <Users className="ml-auto size-4" />
             </DropdownMenuItem>
