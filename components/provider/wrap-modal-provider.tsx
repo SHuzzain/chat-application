@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 
 import ServerModal from "@/components/modals/modal-server";
 import InviteModal from "@/components/modals/modal-invite";
-import ToastProvider from "./toast-provider";
-import MemberModal from "../modals/modal-member";
+import ToastProvider from "@/components/provider/toast-provider";
+import MemberModal from "@/components/modals/modal-member";
+import ChannelModal from "@/components/modals/modal-channel";
 
 type Props = {};
 
-function WrapModalProvider({}: Props) {
+function WrapModalProvider({ }: Props) {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
@@ -22,6 +23,7 @@ function WrapModalProvider({}: Props) {
         <ServerModal />
         <InviteModal />
         <MemberModal />
+        <ChannelModal />
       </>
       {/* toast message */}
       <ToastProvider />

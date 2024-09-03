@@ -24,7 +24,7 @@ interface ModalProps {
     title?: DialogTitleProps;
     description?: DialogDescriptionProps;
   };
-  description: string | React.ReactNode;
+  description?: string | React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
