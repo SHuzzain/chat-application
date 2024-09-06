@@ -14,49 +14,6 @@ type Props = {
   };
 };
 
-
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata | undefined> {
-
-  const id = params.serverId;
-  const profile = await currentProfile();
-
-  const previousImages = (await parent).openGraph?.images || '';
-
-  // Redirect if the profile is not found
-  if (!profile) {
-    auth().redirectToSignIn();
-    return;
-  }
-
-  const server = await prismadb.server.findUnique({
-    where: {
-      id,
-      Member: {
-        some: {
-          profileId: profile.id,
-        },
-      },
-    },
-  });
-
-  const serverName = server?.name || "";
-  const title = serverName ? `Discord | ${serverName}` : "Discord";
-
-  const images = server?.imageUrl || previousImages || ""
-  return {
-    title: title,
-    openGraph: {
-      images,
-    },
-  };
-}
-
-
-
-
 const ServerIdLayout = async ({ children, params }: Props) => {
   const profile = await currentProfile();
   if (!profile) return auth().redirectToSignIn();
@@ -85,3 +42,38 @@ const ServerIdLayout = async ({ children, params }: Props) => {
 };
 
 export default ServerIdLayout;
+
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata | undefined> {
+
+  const id = params.serverId;
+  const profile = await currentProfile();
+
+  const previousImages = (await parent).openGraph?.images || '';
+
+  // Redirect if the profile is not found
+  if (!profile) {
+    auth().redirectToSignIn();
+    return;
+  }
+
+  const server = await prismadb.server.findUnique({
+    where: {
+      id
+    },
+  });
+
+  const serverName = server?.name || "";
+  const title = serverName ? `Discord | ${serverName}` : "Discord";
+
+  const images = server?.imageUrl || previousImages || ""
+  return {
+    title: title,
+    openGraph: {
+      images,
+    },
+  };
+}
