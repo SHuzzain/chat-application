@@ -43,37 +43,38 @@ const ServerIdLayout = async ({ children, params }: Props) => {
 
 export default ServerIdLayout;
 
-
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
-): Promise<Metadata | undefined> {
-
+): Promise<Metadata> {
   const id = params.serverId;
   const profile = await currentProfile();
 
-  const previousImages = (await parent).openGraph?.images || '';
+  const previousImages = (await parent).openGraph?.images || [];
 
-  // Redirect if the profile is not found
   if (!profile) {
     auth().redirectToSignIn();
-    return;
+    return {
+      title: "Discord",
+      openGraph: {
+        images: previousImages,
+      },
+    };
   }
 
   const server = await prismadb.server.findUnique({
     where: {
-      id
+      id: params.serverId,
     },
   });
 
   const serverName = server?.name || "";
   const title = serverName ? `Discord | ${serverName}` : "Discord";
 
-  const images = server?.imageUrl || previousImages || ""
   return {
     title: title,
     openGraph: {
-      images,
+      images: [server?.imageUrl || "", ...previousImages],
     },
   };
 }
