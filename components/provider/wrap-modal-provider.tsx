@@ -9,7 +9,7 @@ import ChannelModal from "@/components/modals/modal-channel";
 
 type Props = {};
 
-function WrapModalProvider({ }: Props) {
+function WrapModalProvider({}: Props) {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);

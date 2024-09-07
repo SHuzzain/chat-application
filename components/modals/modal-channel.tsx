@@ -19,21 +19,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useModal } from "@/store/server-slice";
 import { ChannelType } from "@prisma/client";
 
 import axios from "axios";
 import toast from "react-hot-toast";
-import qs from "query-string"
-
+import qs from "query-string";
 
 function ChannelModal() {
   const { isOpen, type, onClose } = useModal();
 
   const router = useRouter();
-  const params = useParams()
+  const params = useParams();
 
   const [loading, setLoading] = useState(false);
 
@@ -41,14 +46,11 @@ function ChannelModal() {
     resolver: zodResolver(channelSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT
+      type: ChannelType.TEXT,
     },
   });
 
   const ModalIsOpen = isOpen && type === "createChannel";
-
-
-
 
   const onSumbit = async (data: z.infer<typeof channelSchema>) => {
     try {
@@ -56,16 +58,16 @@ function ChannelModal() {
       const url = qs.stringifyUrl({
         url: "/api/channels",
         query: {
-          serverId: params.serverId
-        }
-      })
-      await axios.post(url, data)
-      form.reset()
-      router.refresh()
-      onClose()
-      toast.success("Channel created")
+          serverId: params.serverId,
+        },
+      });
+      await axios.post(url, data);
+      form.reset();
+      router.refresh();
+      onClose();
+      toast.success("Channel created");
     } catch (error) {
-      toast.success("Fail to created channel ")
+      toast.error("Fail to created channel");
     } finally {
       setLoading(false);
     }
@@ -89,7 +91,6 @@ function ChannelModal() {
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSumbit)} className="space-y-8">
-
           <FormField
             control={form.control}
             name="name"
@@ -123,17 +124,21 @@ function ChannelModal() {
                   onValueChange={field.onChange}
                   value={field.value}
                   disabled={field.disabled}
-
                 >
                   <FormControl>
-                    <SelectTrigger className="bg-zinc-300/50 border-0 focus:ring-0 text-black 
-                    ring-offset-0 focus:ring-offset-0 capitalize outline-none">
+                    <SelectTrigger className="border-0 bg-zinc-300/50 focus:ring-0 ring-offset-0 focus:ring-offset-0 text-black capitalize outline-none">
                       <SelectValue placeholder="Select a Channel type" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Object.values(ChannelType).map(type => (
-                      <SelectItem key={type} value={type} className="capitalize">{type.toLowerCase()}</SelectItem>
+                    {Object.values(ChannelType).map((type) => (
+                      <SelectItem
+                        key={type}
+                        value={type}
+                        className="capitalize"
+                      >
+                        {type.toLowerCase()}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

@@ -69,7 +69,7 @@ export async function generateMetadata(
   });
 
   const serverName = server?.name || "";
-  const title = serverName ? `Discord | ${serverName}` : "Discord";
+  const title = serverName ? `${serverName} | Discord` : "Discord";
 
   return {
     title: title,
