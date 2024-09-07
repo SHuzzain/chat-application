@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 import * as z from "zod";
@@ -28,14 +28,15 @@ import {
 } from "@/components/ui/select";
 
 import { useModal } from "@/store/server-slice";
-import { ChannelType } from "@prisma/client";
+import { ChannelType, MemberRole, Server } from "@prisma/client";
 
 import axios from "axios";
 import toast from "react-hot-toast";
 import qs from "query-string";
 
 function ChannelModal() {
-  const { isOpen, type, onClose } = useModal();
+  const { isOpen, type, onClose, data } = useModal();
+  const server = data?.server;
 
   const router = useRouter();
   const params = useParams();
@@ -72,6 +73,16 @@ function ChannelModal() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (server) {
+      const { name, type } = server as Server & { type: ChannelType };
+      form.setValue("name", name);
+      form.setValue("type", type);
+    }
+    return () => form.reset();
+  }, [server]);
+
   return (
     <Modal
       componentStyle={{
