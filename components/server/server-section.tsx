@@ -40,8 +40,7 @@ const ServerSection = ({
         >
           <Button
             onClick={() => {
-              //@ts-ignore
-              onOpen("createChannel", { server: { type: channelType } });
+              onOpen("createChannel", { channel: { type: channelType! } });
             }}
             variant={"ghost"}
             size={"icon"}

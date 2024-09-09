@@ -5,7 +5,7 @@ import { currentProfile } from "@/lib/current-profile";
 import prismadb from "@/lib/prismadb";
 
 import { auth } from "@clerk/nextjs/server";
-import { Channel, ChannelType, MemberRole } from "@prisma/client";
+import { Channel, ChannelType } from "@prisma/client";
 
 import ServerHeader from "@/components/server/server-header";
 import ServerSearch from "@/components/server/server-search";
@@ -16,7 +16,7 @@ import ServerMember from "@/components/server/server-member";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
-import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react";
+import { Hash, Mic, Video } from "lucide-react";
 import { roleIconMap } from "@/helper";
 const iconMap = {
   [ChannelType.TEXT]: <Hash className="mr-2 size-4" />,
@@ -54,6 +54,9 @@ const ServerSideBar = async ({ serverId }: Props) => {
     },
   });
 
+  if (!server) return redirect("/");
+
+
   const categorizedChannels: Record<
     string,
     (Channel & { icon: React.ReactNode })[]
@@ -88,7 +91,6 @@ const ServerSideBar = async ({ serverId }: Props) => {
     (member) => member.profileId !== profile.id
   );
 
-  if (!server) return redirect("/");
 
   const role = server.Member.find(
     (member) => member.profileId === profile.id

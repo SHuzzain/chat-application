@@ -33,4 +33,6 @@ const OnCopyButton = React.forwardRef<HTMLButtonElement, ButtonProps & Props>(
   }
 );
 
+OnCopyButton.displayName = "OnCopyButton";
+
 export default OnCopyButton;

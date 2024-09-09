@@ -55,7 +55,7 @@ function ServerModal() {
       form.setValue("imageUrl", imageUrl);
     }
     return () => form.reset();
-  }, [server]);
+  }, [server, form]);
 
   const onSumbit = async (data: z.infer<typeof serverSchema>) => {
     try {

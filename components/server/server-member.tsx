@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { roleIconMap } from "@/helper";
@@ -16,11 +16,17 @@ type Props = {
 
 const ServerMember = ({ member, server }: Props) => {
   const params = useParams();
+  const router = useRouter()
+
+  const memberRedirect = () => {
+    router.push(`/server/${params?.serverId}/conversations/${member.id}`)
+  }
 
   const Icon = roleIconMap[member.role];
 
   return (
     <button
+      onClick={memberRedirect}
       className={cn(
         `flex items-center group p-2 rounded-md gap-x-2 
         w-full hover:bg-zinc-700/10 dark:hover:bg-zinc-700 mb-1`,
@@ -35,7 +41,7 @@ const ServerMember = ({ member, server }: Props) => {
         group-hover:text-zinc-600 dark:text-zinc-400 
         dark:group-hover:text-zinc-300 transition`,
           params?.memberId === member.id &&
-            "text-primary dark:text-zinc-200 dark:group-hover:text-white"
+          "text-primary dark:text-zinc-200 dark:group-hover:text-white"
         )}
       >
         {member.profile.name}

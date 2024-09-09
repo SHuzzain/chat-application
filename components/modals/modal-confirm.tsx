@@ -18,6 +18,7 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   axiosFunction: () => Promise<AxiosResponse>;
+  redirectPath?: string
 };
 
 function ConfirmModal({
@@ -26,6 +27,7 @@ function ConfirmModal({
   isOpen,
   onClose,
   axiosFunction,
+  redirectPath = "/"
 }: Props) {
   const router = useRouter();
 
@@ -36,8 +38,8 @@ function ConfirmModal({
       setLoading(true);
       await axiosFunction();
       onClose();
+      router.push(redirectPath);
       router.refresh();
-      router.push("/");
     } catch (error) {
       toast.error("Failed");
     } finally {

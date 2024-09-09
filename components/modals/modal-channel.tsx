@@ -36,7 +36,7 @@ import qs from "query-string";
 
 function ChannelModal() {
   const { isOpen, type, onClose, data } = useModal();
-  const server = data?.server;
+  const channel = data?.channel;
 
   const router = useRouter();
   const params = useParams();
@@ -53,35 +53,56 @@ function ChannelModal() {
 
   const ModalIsOpen = isOpen && type === "createChannel";
 
+  const channelInfo = {
+    title: channel?.id ? 'Update Channel' : 'Create Channel',
+    message: channel?.id
+      ? "Channel updated"
+      : "Channel created",
+    button: channel?.id ? "Save" : "Create",
+  };
+
+
   const onSumbit = async (data: z.infer<typeof channelSchema>) => {
     try {
       setLoading(true);
-      const url = qs.stringifyUrl({
-        url: "/api/channels",
-        query: {
-          serverId: params.serverId,
-        },
-      });
-      await axios.post(url, data);
+
+      if (channel) {
+        const url = qs.stringifyUrl({
+          url: `/api/channels/${channel.id}`,
+          query: {
+            serverId: params.serverId,
+          },
+        });
+        await axios.patch(url, data);
+      } else {
+        const url = qs.stringifyUrl({
+          url: "/api/channels",
+          query: {
+            serverId: params.serverId,
+          },
+        });
+        await axios.post(url, data);
+      }
+
       form.reset();
       router.refresh();
       onClose();
-      toast.success("Channel created");
+      toast.success(channelInfo.message);
     } catch (error) {
-      toast.error("Fail to created channel");
+      toast.error(`Fail to ${channelInfo.button} channel`);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (server) {
-      const { name, type } = server as Server & { type: ChannelType };
-      form.setValue("name", name);
+    if (channel) {
+      const { name, type } = channel
+      form.setValue("name", name ?? "");
       form.setValue("type", type);
     }
     return () => form.reset();
-  }, [server]);
+  }, [channel]);
 
   return (
     <Modal
@@ -96,7 +117,7 @@ function ChannelModal() {
           className: "text-2xl text-center font-bold",
         },
       }}
-      title="Create Channel"
+      title={channelInfo.title}
       isOpen={ModalIsOpen}
       onClose={onClose}
     >
@@ -158,7 +179,7 @@ function ChannelModal() {
           />
           <DialogFooter className="bg-gray-200 px-6 py-4">
             <Button type="submit" disabled={loading} variant={"primary"}>
-              Create
+              {channelInfo.button}
             </Button>
           </DialogFooter>
         </form>
