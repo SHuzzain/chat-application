@@ -43,6 +43,8 @@ const ServerIdLayout = async ({ children, params }: Props) => {
 
 export default ServerIdLayout;
 
+// meta data
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata

@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import axios from "axios";
 import { Channel, ChannelType, MemberRole, Server } from "@prisma/client";
-import qs from "query-string"
+import qs from "query-string";
 
 import { Edit, Hash, Lock, Mic, Trash, Video } from "lucide-react";
 
@@ -32,33 +32,32 @@ const ServerChannel = ({ channel, role, server }: Props) => {
 
   const { onOpen } = useModal();
 
-  const [confirm, setConfirm] = useState<{ isOpen: boolean, channel?: Channel }>({ isOpen: false });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    channel?: Channel;
+  }>({ isOpen: false });
 
   const confirmInfo = useMemo(() => {
-
     const url = qs.stringifyUrl({
       url: `/api/channels/${channel?.id}`,
       query: {
-        serverId: params?.serverId
-      }
-    })
+        serverId: params?.serverId,
+      },
+    });
 
     const defaultConfirmInfo = {
-      title: '',
+      title: "",
       description: <></>,
       axiosFunction: () => axios.delete(url),
-      redirectPath: `${params?.serverId}`
+      redirectPath: `${params?.serverId}`,
     };
 
     if (!confirm) {
       return defaultConfirmInfo;
     }
 
-
     switch (confirm?.channel?.type) {
-
       case "TEXT":
-
         defaultConfirmInfo.title = "Delete Text Channel";
         defaultConfirmInfo.description = (
           <>
@@ -73,7 +72,6 @@ const ServerChannel = ({ channel, role, server }: Props) => {
         break;
 
       case "VOICE":
-
         defaultConfirmInfo.title = "Delete Voice Channel";
         defaultConfirmInfo.description = (
           <>
@@ -87,9 +85,7 @@ const ServerChannel = ({ channel, role, server }: Props) => {
 
         break;
 
-
       case "VIDEO":
-
         defaultConfirmInfo.title = "Delete Video Channel";
         defaultConfirmInfo.description = (
           <>
@@ -111,20 +107,18 @@ const ServerChannel = ({ channel, role, server }: Props) => {
   }, [confirm?.channel?.id, channel?.id]);
 
   const channelRedirect = () => {
-    router.push(`server/${params?.serverId}/channels/${channel?.id}`)
-  }
+    router.push(`/server/${params?.serverId}/channels/${channel?.id}`);
+  };
 
   const Icon = iconMap[channel.type];
   return (
     <>
-
-
       <button
         onClick={channelRedirect}
         className={cn(
           `flex items-center group p-2 rounded-md gap-x-2 
         w-full hover:bg-zinc-700/10 dark:hover:bg-zinc-700 mb-1`,
-          params?.channeId === channel.id && "bg-zinc-700/20 dark:bg-zinc-700 "
+          params?.channelId === channel.id && "bg-zinc-700/20 dark:bg-zinc-700 "
         )}
       >
         <Icon className="flex-shrink-0 text-zinc-500 dark:text-zinc-400 size-5" />
@@ -134,19 +128,29 @@ const ServerChannel = ({ channel, role, server }: Props) => {
             `line-clamp-1 font-semibold text-sm text-zinc-500 
         group-hover:text-zinc-600 dark:text-zinc-400 
         dark:group-hover:text-zinc-300 transition`,
-            params?.channeId === channel.id &&
-            "text-primary dark:text-zinc-200 dark:group-hover:text-white"
+            params?.channelId === channel.id &&
+              "text-primary dark:text-zinc-200 dark:group-hover:text-white"
           )}
         >
           {channel.name}
         </p>
         {channel.name !== "general" && role !== MemberRole.GUEST && (
           <div className="flex items-center gap-x-2 ml-auto">
-            <ActionTooltip label="Edit" >
-              <Edit onClick={(e) => onAction(e, () => onOpen("createChannel", { channel }))} className="group-hover:block hidden text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 dark:text-zinc-400 transition size-4" />
+            <ActionTooltip label="Edit">
+              <Edit
+                onClick={(e) =>
+                  onAction(e, () => onOpen("createChannel", { channel }))
+                }
+                className="group-hover:block hidden text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 dark:text-zinc-400 transition size-4"
+              />
             </ActionTooltip>
             <ActionTooltip label="Delete">
-              <Trash onClick={(e) => onAction(e, () => setConfirm({ isOpen: true, channel }))} className="group-hover:block hidden text-zinc-400 hover:text-rose-600 dark:hover:text-rose-500 dark:text-zinc-400 transition size-4" />
+              <Trash
+                onClick={(e) =>
+                  onAction(e, () => setConfirm({ isOpen: true, channel }))
+                }
+                className="group-hover:block hidden text-zinc-400 hover:text-rose-600 dark:hover:text-rose-500 dark:text-zinc-400 transition size-4"
+              />
             </ActionTooltip>
           </div>
         )}

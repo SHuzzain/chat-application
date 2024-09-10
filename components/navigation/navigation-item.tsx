@@ -16,7 +16,7 @@ const NavigationItem = ({ id, imageUrl, name }: Props) => {
   const router = useRouter();
 
   const changeServerRoute = (id: string) => {
-    router.replace(id);
+    router.replace(`/server/${id}`);
   };
   return (
     <ActionTooltip

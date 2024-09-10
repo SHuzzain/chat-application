@@ -16,11 +16,11 @@ type Props = {
 
 const ServerMember = ({ member, server }: Props) => {
   const params = useParams();
-  const router = useRouter()
+  const router = useRouter();
 
   const memberRedirect = () => {
-    router.push(`/server/${params?.serverId}/conversations/${member.id}`)
-  }
+    router.push(`/server/${params?.serverId}/conversations/${member.id}`);
+  };
 
   const Icon = roleIconMap[member.role];
 
@@ -41,7 +41,7 @@ const ServerMember = ({ member, server }: Props) => {
         group-hover:text-zinc-600 dark:text-zinc-400 
         dark:group-hover:text-zinc-300 transition`,
           params?.memberId === member.id &&
-          "text-primary dark:text-zinc-200 dark:group-hover:text-white"
+            "text-primary dark:text-zinc-200 dark:group-hover:text-white"
         )}
       >
         {member.profile.name}
