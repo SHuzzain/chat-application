@@ -35,6 +35,7 @@ const ChatInput = ({ apiUser, name, query, type }: Props) => {
         <FormField
           control={form.control}
           name="content"
+          disabled={isLoading}
           render={({ field }) => (
             <FormItem>
               <FormControl>
@@ -46,7 +47,7 @@ const ChatInput = ({ apiUser, name, query, type }: Props) => {
                     <Plus className="text-white dark:text-[#313338]" />
                   </button>
                   <Input
-                    disabled={isLoading}
+                    {...field}
                     className="border-0 bg-zinc-200/90 dark:bg-zinc-700/75 px-14 py-6 border-none focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
                     placeholder={`Message ${
                       type === "conversation" ? name : "#".concat(name)
