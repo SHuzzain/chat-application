@@ -29,5 +29,12 @@ export const channelSchema = z.object({
 //chat form
 export const chatSchema = z.object({
   content: z.string().min(1),
+  fileUrl: z.string().min(1).optional(),
+});
+//end
+
+//chat form
+export const UploadSchema = z.object({
+  fileUrl: z.string().min(1),
 });
 //end

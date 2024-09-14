@@ -1,4 +1,5 @@
 import ChatHeader from "@/components/chat/chat-header";
+import ChatInput from "@/components/chat/chat-input";
 import { getOrCreateConversation } from "@/lib/conversation";
 import { currentProfile } from "@/lib/current-profile";
 import prismadb from "@/lib/prismadb";
@@ -47,6 +48,18 @@ const MemberIdPage = async ({ params }: Props) => {
         name={otherMember.profile.name}
         serverId={params.serverId}
         type="conversation"
+      />
+
+      <div className="flex-1">one on one messages</div>
+
+      <ChatInput
+        apiUrl="/api/socket/conversation"
+        name={otherMember.profile.name}
+        type="conversation"
+        query={{
+          channelId: otherMember.id,
+          serverId: otherMember.serverId,
+        }}
       />
     </div>
   );

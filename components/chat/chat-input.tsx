@@ -11,14 +11,20 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Plus, Smile } from "lucide-react";
 
+import qs from "query-string";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useModal } from "@/store/server-slice";
+
 type Props = {
-  apiUser: string;
+  apiUrl: string;
   query: Record<string, any>;
   name: string;
   type: "conversation" | "channel";
 };
 
-const ChatInput = ({ apiUser, name, query, type }: Props) => {
+const ChatInput = ({ apiUrl, name, query, type }: Props) => {
+  const { onOpen } = useModal();
   const form = useForm<z.infer<typeof chatSchema>>({
     resolver: zodResolver(chatSchema),
     defaultValues: {
@@ -28,7 +34,19 @@ const ChatInput = ({ apiUser, name, query, type }: Props) => {
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (data: z.infer<typeof chatSchema>) => {};
+  const onSubmit = async (data: z.infer<typeof chatSchema>) => {
+    try {
+      const url = qs.stringifyUrl({
+        url: apiUrl,
+        query,
+      });
+      await axios.post(url, data);
+    } catch (error) {
+      toast.error("Failed");
+    } finally {
+      form.reset();
+    }
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -41,7 +59,10 @@ const ChatInput = ({ apiUser, name, query, type }: Props) => {
               <FormControl>
                 <div className="relative p-4 pb-6">
                   <button
-                    onClick={() => {}}
+                    type="button"
+                    onClick={() =>
+                      onOpen("messageModal", { chat: { apiUrl, query } })
+                    }
                     className="top-7 left-8 absolute flex justify-center items-center bg-zinc-500 hover:bg-zinc-600 dark:hover:bg-zinc-300 dark:bg-zinc-400 p-1 rounded-full transition size-6"
                   >
                     <Plus className="text-white dark:text-[#313338]" />

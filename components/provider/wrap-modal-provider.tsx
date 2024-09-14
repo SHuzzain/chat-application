@@ -6,6 +6,7 @@ import InviteModal from "@/components/modals/modal-invite";
 import ToastProvider from "@/components/provider/toast-provider";
 import MemberModal from "@/components/modals/modal-member";
 import ChannelModal from "@/components/modals/modal-channel";
+import ChatFileUploadModal from "@/components/modals/modal-upload";
 
 type Props = {};
 
@@ -24,6 +25,7 @@ function WrapModalProvider({}: Props) {
         <InviteModal />
         <MemberModal />
         <ChannelModal />
+        <ChatFileUploadModal />
       </>
       {/* toast message */}
       <ToastProvider />
