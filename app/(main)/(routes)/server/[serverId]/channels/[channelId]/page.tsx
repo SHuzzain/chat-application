@@ -1,4 +1,5 @@
 import ChatHeader from "@/components/chat/chat-header";
+import ChatInput from "@/components/chat/chat-input";
 import { currentProfile } from "@/lib/current-profile";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
@@ -38,6 +39,17 @@ const ChannelIdPage = async ({ params: { channelId, serverId } }: Props) => {
         name={channel.name}
         serverId={channel.serverId}
         type="channels"
+      />
+      <div className="flex-1">messages</div>
+
+      <ChatInput
+        apiUser="/api/socket/messages"
+        name={channel.name}
+        type="channel"
+        query={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
       />
     </div>
   );

@@ -14,12 +14,20 @@ export const serverSchema = z.object({
 
 // channel form
 export const channelSchema = z.object({
-  name: z.string().min(1, {
-    message: "Channel name is required",
-  }).refine(name => name !== "general", {
-    message: "Channel name can't be 'general'"
-  }),
-  type: z.nativeEnum(ChannelType)
+  name: z
+    .string()
+    .min(1, {
+      message: "Channel name is required",
+    })
+    .refine((name) => name !== "general", {
+      message: "Channel name can't be 'general'",
+    }),
+  type: z.nativeEnum(ChannelType),
 });
 //end
 
+//chat form
+export const chatSchema = z.object({
+  content: z.string().min(1),
+});
+//end
