@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/provider/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
+import "./globals.css";
+import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/provider/theme-provider";
 import WrapModalProvider from "@/components/provider/wrap-modal-provider";
+import { SocketProvider } from "@/components/provider/socket-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Discord',
+  title: "Discord",
   description: "Discord",
 };
 
@@ -29,7 +30,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <SocketProvider>{children}</SocketProvider>
 
             <WrapModalProvider />
           </ThemeProvider>

@@ -28,19 +28,18 @@ const NavigationItem = ({ id, imageUrl, name }: Props) => {
         },
       }}
     >
-      <button
-        type="button"
+      <div
         onClick={() => changeServerRoute(id)}
-        className="relative flex items-center dark:bg-transparent group"
+        className="relative flex items-center dark:bg-transparent cursor-pointer group"
       >
-        <div
+        <section
           className={cn(
             "absolute left-0 bg-primary rounded-r-full transition-all w-1",
             params?.serverId !== id && "group-hover:h-5",
             params?.serverId === id ? "h-9" : "h-2"
           )}
         />
-        <div
+        <section
           className={cn(
             `relative    transition-all 
              overflow-hidden flex mx-3 size-12 `,
@@ -49,8 +48,8 @@ const NavigationItem = ({ id, imageUrl, name }: Props) => {
           )}
         >
           <Image fill src={imageUrl} alt="Channel" className="object-cover" />
-        </div>
-      </button>
+        </section>
+      </div>
     </ActionTooltip>
   );
 };

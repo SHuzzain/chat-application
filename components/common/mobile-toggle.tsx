@@ -14,10 +14,11 @@ type Props = {
 const MobileToggle = ({ serverId }: Props) => {
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button size={"icon"} variant={"ghost"} className="md:hidden">
-          <Menu />
-        </Button>
+      <SheetTrigger
+        asChild
+        className="md:hidden hover:bg-accent px-8 rounded-md h-10 hover:text-accent-foreground"
+      >
+        <Menu />
       </SheetTrigger>
 
       <SheetContent
