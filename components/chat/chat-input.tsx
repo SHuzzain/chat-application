@@ -9,7 +9,8 @@ import * as z from "zod";
 
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Plus, Smile } from "lucide-react";
+import EmojiPicker from "@/components/common/emoji-picker";
+import { Plus } from "lucide-react";
 
 import qs from "query-string";
 import toast from "react-hot-toast";
@@ -75,7 +76,11 @@ const ChatInput = ({ apiUrl, name, query, type }: Props) => {
                     }`}
                   />
                   <div className="top-7 right-8 absolute">
-                    <Smile />
+                    <EmojiPicker
+                      onChange={(value) =>
+                        field.onChange(`${field.value}${value}`)
+                      }
+                    />
                   </div>
                 </div>
               </FormControl>

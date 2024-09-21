@@ -11,6 +11,8 @@ export const config = {
 
 const ioHeadler = (req: NextApiRequest, res: NextApiResposeServerIO) => {
   if (!res.socket.server.io) {
+    console.log("Initializing Socket.io server...");
+
     const path = "/api/socket/io";
     const httpServer: NetServer = res.socket.server as any;
     const io = new ServerIO(httpServer, {

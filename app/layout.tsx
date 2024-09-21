@@ -6,6 +6,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/provider/theme-provider";
 import WrapModalProvider from "@/components/provider/wrap-modal-provider";
 import { SocketProvider } from "@/components/provider/socket-provider";
+import QueryProvider from "@/components/provider/query-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,7 +31,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <SocketProvider>{children}</SocketProvider>
+            <SocketProvider>
+              <QueryProvider>{children}</QueryProvider>
+            </SocketProvider>
 
             <WrapModalProvider />
           </ThemeProvider>
