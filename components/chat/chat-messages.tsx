@@ -1,10 +1,15 @@
 "use client";
+import React, { Fragment } from "react";
 
-import { Member } from "@prisma/client";
-import React from "react";
-import ChatWelcome from "./chat-welcome";
-import { useChatQuery } from "@/hook/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";
+
+import { useChatQuery } from "@/hook/use-chat-query";
+import { Member, Message, Profile } from "@prisma/client";
+
+import ChatWelcome from "@/components/chat/chat-welcome";
+import ChatItem from "@/components/chat/chat-item";
+
+import { format } from "date-fns";
 
 type Props = {
   name: string;
@@ -17,6 +22,14 @@ type Props = {
   paramKey: "channelId" | "conversationId";
   paramValue: string;
 };
+
+interface MessagesWithMemberAndProfile extends Message {
+  member: Member & {
+    profile: Profile;
+  };
+}
+
+const DATE_FORMAT = "d MMM yyy, HH:mm";
 
 const ChatMessages = (props: Props) => {
   const {
@@ -31,16 +44,8 @@ const ChatMessages = (props: Props) => {
     type,
   } = props;
   const queryKey = `chat:${chatId}`;
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    status,
-  } = useChatQuery({ queryKey, apiUrl, paramKey, paramValue });
-
-  console.log({ status });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+    useChatQuery({ queryKey, apiUrl, paramKey, paramValue });
 
   if (status === "pending") {
     return (
@@ -63,11 +68,33 @@ const ChatMessages = (props: Props) => {
       </div>
     );
   }
-
   return (
     <div className="flex flex-col flex-1 py-4 overflow-y-auto">
-      <div className="flex flex-1 items-end">
+      <div className="flex flex-col flex-1 justify-end">
         <ChatWelcome name={name} type={type} />
+        <div className="flex flex-col-reverse items-start">
+          {data?.pages?.map(
+            (group: { items: MessagesWithMemberAndProfile[] }, i) => (
+              <Fragment key={i}>
+                {group.items?.map((message) => (
+                  <ChatItem
+                    key={message.id}
+                    id={message.id}
+                    content={message.content}
+                    member={message.member}
+                    fileUrl={message.fileUrl}
+                    currentMember={member}
+                    deleted={message.deleted}
+                    timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+                    isUpdated={message.createdAt !== message.updatedAt}
+                    socketUrl={socketUrl}
+                    socketQuery={socketQuery}
+                  />
+                ))}
+              </Fragment>
+            )
+          )}
+        </div>
       </div>
     </div>
   );

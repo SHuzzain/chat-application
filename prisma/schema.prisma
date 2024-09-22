@@ -60,7 +60,7 @@ model Member {
   serverId String
   server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
-  messgages      Messgage[]
+  messages       Message[]
   directMessages DirectMessage[]
 
   conversationInitiated Conversation[] @relation("MemberOne")
@@ -90,13 +90,13 @@ model Channel {
   serverId String
   server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
-  messgages Messgage[]
+  messages Message[]
 
   @@index([profileId])
   @@index([serverId])
 }
 
-model Messgage {
+model Message {
   id      String @id @default(uuid())
   content String @db.Text
 

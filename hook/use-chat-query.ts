@@ -1,3 +1,4 @@
+"use client";
 import { useSocket } from "@/components/provider/socket-provider";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import qs from "query-string";
@@ -18,7 +19,11 @@ export const useChatQuery = ({
   try {
     const { isConnected } = useSocket();
 
-    const fetchMessages = async ({ pageParam }: { pageParam: any }) => {
+    const fetchMessages = async ({
+      pageParam = undefined,
+    }: {
+      pageParam: any;
+    }) => {
       const url = qs.stringifyUrl(
         {
           url: apiUrl,
@@ -64,6 +69,12 @@ export const useChatQuery = ({
     };
   } catch (error) {
     console.log(`[CHAT_QUERY_HOOK]`, error);
-    return { message: "Faild to fetch", success: false, error };
+
+    return {
+      message: "Faild to fetch",
+      success: false,
+      error,
+      status: "error",
+    };
   }
 };

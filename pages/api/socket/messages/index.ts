@@ -23,7 +23,8 @@ export default async function handler(
 
     if (!serverId) return res.status(400).json({ error: "Server ID Missing" });
 
-    if (!channelId) return res.status(400).json({ error: "Server ID Missing" });
+    if (!channelId)
+      return res.status(400).json({ error: "Channel ID Missing" });
 
     const server = await prismadb.server.findFirst({
       where: {
@@ -55,7 +56,7 @@ export default async function handler(
 
     const { content, fileUrl } = data;
 
-    const message = await prismadb.messgage.create({
+    const message = await prismadb.message.create({
       data: {
         content,
         fileUrl,
