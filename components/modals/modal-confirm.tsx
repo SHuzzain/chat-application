@@ -12,14 +12,14 @@ import { DialogFooter } from "@/components/ui/dialog";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-type Props = {
+export interface ConfirmModalProps {
   title: string | ReactNode;
   description?: string | ReactNode;
   isOpen: boolean;
   onClose: () => void;
-  axiosFunction: () => Promise<AxiosResponse>;
-  redirectPath?: string
-};
+  axiosFunction: () => Promise<AxiosResponse | void>;
+  redirectPath?: string;
+}
 
 function ConfirmModal({
   title,
@@ -27,8 +27,8 @@ function ConfirmModal({
   isOpen,
   onClose,
   axiosFunction,
-  redirectPath = "/"
-}: Props) {
+  redirectPath,
+}: ConfirmModalProps) {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ function ConfirmModal({
       setLoading(true);
       await axiosFunction();
       onClose();
-      router.push(redirectPath);
+      redirectPath && router.push(redirectPath);
       router.refresh();
     } catch (error) {
       toast.error("Failed");

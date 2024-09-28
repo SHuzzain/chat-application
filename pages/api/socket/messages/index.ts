@@ -73,12 +73,12 @@ export default async function handler(
     });
 
     const channelKey = `chat:${channelId}:messages`;
-
+    console.log({ channelKey });
     res?.socket?.server?.io?.emit(channelKey, message);
 
     return res.status(200).json(message);
-  } catch (error) {
-    console.log("[MESSAGES_POST]", error);
+  } catch (error: any) {
+    console.error("[MESSAGES_POST]", error?.stack || error);
     return res.status(500).json({ error: "Internal Error" });
   }
 }

@@ -54,23 +54,19 @@ function ChannelModal() {
   const ModalIsOpen = isOpen && type === "createChannel";
 
   const channelInfo = {
-    title: channel?.id ? 'Update Channel' : 'Create Channel',
-    message: channel?.id
-      ? "Channel updated"
-      : "Channel created",
+    title: channel?.id ? "Update Channel" : "Create Channel",
+    message: channel?.id ? "Channel updated" : "Channel created",
     button: channel?.id ? "Save" : "Create",
   };
-
 
   const onSumbit = async (data: z.infer<typeof channelSchema>) => {
     try {
       setLoading(true);
-
-      if (channel) {
+      if (channel?.id) {
         const url = qs.stringifyUrl({
           url: `/api/channels/${channel.id}`,
           query: {
-            serverId: params.serverId,
+            serverId: params?.serverId!,
           },
         });
         await axios.patch(url, data);
@@ -78,7 +74,7 @@ function ChannelModal() {
         const url = qs.stringifyUrl({
           url: "/api/channels",
           query: {
-            serverId: params.serverId,
+            serverId: params?.serverId!,
           },
         });
         await axios.post(url, data);
@@ -97,7 +93,7 @@ function ChannelModal() {
 
   useEffect(() => {
     if (channel) {
-      const { name, type } = channel
+      const { name, type } = channel;
       form.setValue("name", name ?? "");
       form.setValue("type", type);
     }

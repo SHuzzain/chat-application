@@ -15,12 +15,9 @@ export default async function handler(
   }
   try {
     const profile = await currentPageProfile(req);
-    const { success, error, data } = chatSchema.safeParse(req.body);
     const { serverId, channelId, messageId } = req.query;
 
     if (!profile) return res.status(401).json({ error: "Unauthorized" });
-
-    if (!success) return res.status(400).json({ error: error.message });
 
     if (!serverId) return res.status(400).json({ error: "Server ID Missing" });
 
@@ -75,7 +72,6 @@ export default async function handler(
     if (!message || message.deleted) {
       return res.status(404).json({ error: "Message not found" });
     }
-    const { content } = data;
 
     const isMessageOwner = message.memberId === member.id;
     const isAdmin = member.role === MemberRole.ADMIN;
@@ -102,7 +98,13 @@ export default async function handler(
           },
         },
       });
-    } else if (req.method === "PATCH") {
+    }
+
+    if (req.method === "PATCH") {
+      const { success, error, data } = chatSchema.safeParse(req.body);
+      if (!success) return res.status(400).json({ error: error.message });
+      const { content } = data;
+
       if (!isMessageOwner)
         return res.status(401).json({ error: "Unauthorized" });
 

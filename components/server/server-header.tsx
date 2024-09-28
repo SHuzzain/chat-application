@@ -152,6 +152,7 @@ const ServerHeader = ({ server, role }: Props) => {
         {...confirmInfo}
         isOpen={confirm.isOpen}
         onClose={() => setConfirm({ isOpen: false })}
+        redirectPath="/"
       />
     </>
   );
