@@ -137,7 +137,7 @@ model DirectMessage {
   id      String @id @default(uuid())
   content String
 
-  fileUrl String
+  fileUrl String?
 
   memberId String
   member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)

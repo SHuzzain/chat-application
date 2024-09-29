@@ -1,17 +1,30 @@
-import { Hash, Menu } from "lucide-react";
 import React from "react";
+import { Hash } from "lucide-react";
+
 import MobileToggle from "@/components/common/mobile-toggle";
 import UserAvatar from "@/components/common/user-avatar";
 import SocketIndicator from "@/components/common/socket-indicator";
+import { ChatVideoButton } from "@/components/chat/video-audio-chat/video-chat-bottom";
+import { ChatAudioButton } from "@/components/chat/video-audio-chat/audio-chat-bottom";
 
 type Props = {
   serverId: string;
   name: string;
   type: "channels" | "conversation";
   imageUrl?: string;
+  searchParams?: {
+    video?: boolean;
+    audio?: boolean;
+  };
 };
 
-const ChatHeader = ({ imageUrl, name, serverId, type }: Props) => {
+const ChatHeader = ({
+  imageUrl,
+  name,
+  serverId,
+  type,
+  searchParams,
+}: Props) => {
   return (
     <div className="flex items-center border-neutral-200 dark:border-neutral-800 px-3 border-b-2 h-12 font-semibold text-md">
       <aside>
@@ -26,6 +39,9 @@ const ChatHeader = ({ imageUrl, name, serverId, type }: Props) => {
       <p className="font-semibold text-black text-md dark:text-white">{name}</p>
 
       <div className="flex items-center ml-auto">
+        {type === "conversation" && !searchParams?.audio && <ChatVideoButton />}
+        {type === "conversation" && !searchParams?.video && <ChatAudioButton />}
+
         <SocketIndicator />
       </div>
     </div>

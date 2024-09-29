@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { Member, Message, Profile } from "@prisma/client";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useIntersectionObserver } from "@/hook/use-intersection-observer";
+import { useChatSCroll } from "@/hook/use-chat-scroll";
 
 type Props = {
   name: string;
@@ -72,6 +73,12 @@ const ChatMessages = (props: Props) => {
   });
 
   useChatSocket({ addKey, queryKey, updateKey });
+
+  useChatSCroll({
+    bottomRef,
+    topRef: chatRef,
+    count: data?.pages[0]?.items?.length ?? 0,
+  });
 
   if (status === "pending") {
     return (

@@ -15,52 +15,62 @@ export default async function handler(
   try {
     const profile = await currentPageProfile(req);
     const { success, error, data } = chatSchema.safeParse(req.body);
-    const { serverId, channelId } = req.query;
+    const { conversationId } = req.query;
 
     if (!profile) return res.status(401).json({ error: "Unauthorized" });
 
     if (!success) return res.status(400).json({ error: error.message });
 
-    if (!serverId) return res.status(400).json({ error: "Server ID Missing" });
+    if (!conversationId)
+      return res.status(400).json({ error: "Conversation ID Missing" });
 
-    if (!channelId)
-      return res.status(400).json({ error: "Channel ID Missing" });
-
-    const server = await prismadb.server.findFirst({
+    const conversation = await prismadb.conversation.findFirst({
       where: {
-        id: serverId as string,
-        Member: {
-          some: {
-            profileId: profile.id,
+        id: conversationId as string,
+        OR: [
+          {
+            memberOne: {
+              profileId: profile.id,
+            },
+          },
+          {
+            memberTwo: {
+              profileId: profile.id,
+            },
+          },
+        ],
+      },
+      include: {
+        memberOne: {
+          include: {
+            profile: true,
+          },
+        },
+        memberTwo: {
+          include: {
+            profile: true,
           },
         },
       },
-      include: {
-        Member: true,
-      },
     });
-    if (!server) return res.status(401).json({ error: "Server Not Found" });
+    console.log({ conversation });
+    if (!conversation)
+      return res.status(401).json({ error: "Conversation Not Found" });
 
-    const channel = await prismadb.channel.findFirst({
-      where: {
-        id: channelId as string,
-        serverId: serverId as string,
-      },
-    });
-    if (!channel) return res.status(401).json({ error: "Channel Not Found" });
+    const member =
+      conversation.memberOne.profileId === profile.id
+        ? conversation.memberOne
+        : conversation.memberTwo;
 
-    const member = server.Member.find(
-      (member) => member.profileId === profile.id
-    );
     if (!member) return res.status(401).json({ error: "Member Not Found" });
 
     const { content, fileUrl } = data;
 
-    const message = await prismadb.message.create({
+    const message = await prismadb.directMessage.create({
       data: {
         content,
         fileUrl,
-        channelId: channelId as string,
+        conversationId: conversationId as string,
         memberId: member.id,
       },
       include: {
@@ -72,12 +82,12 @@ export default async function handler(
       },
     });
 
-    const channelKey = `chat:${channelId}:messages`;
+    const channelKey = `chat:${conversationId}:messages`;
     res?.socket?.server?.io?.emit(channelKey, message);
 
     return res.status(200).json(message);
   } catch (error: any) {
-    console.error("[MESSAGES_POST]", error?.stack || error);
+    console.error("[DIRECT_MESSAGES_POST]", error?.stack || error);
     return res.status(500).json({ error: "Internal Error" });
   }
 }
