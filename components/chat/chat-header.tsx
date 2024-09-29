@@ -36,7 +36,9 @@ const ChatHeader = ({
       {type === "conversation" && imageUrl && (
         <UserAvatar src={imageUrl} className="mr-2 size-8 md:size-8" />
       )}
-      <p className="font-semibold text-black text-md dark:text-white">{name}</p>
+      <p className="font-semibold text-black text-sm md:text-base dark:text-white">
+        {name}
+      </p>
 
       <div className="flex items-center ml-auto">
         {type === "conversation" && !searchParams?.audio && <ChatVideoButton />}
