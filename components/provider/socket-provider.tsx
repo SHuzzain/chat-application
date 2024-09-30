@@ -32,7 +32,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const socketInstance = ClientIO(
-      process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL as string,
+      process.env.NEXT_PUBLIC_BASE_URL as string,
       {
         path: "/api/socket/io",
         addTrailingSlash: false,
