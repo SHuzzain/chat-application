@@ -11,7 +11,10 @@ import QueryProvider from "@/components/provider/query-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Discord",
+  title: {
+    default: "Discord",
+    template: "%s | Discord",
+  },
   description: "Discord",
 };
 

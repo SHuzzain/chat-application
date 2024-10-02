@@ -149,7 +149,7 @@ const ChatItem = (props: Props) => {
     form.reset({
       content,
     });
-  }, [content]);
+  }, [content, form]);
 
   return (
     <>

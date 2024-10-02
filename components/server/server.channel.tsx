@@ -104,7 +104,7 @@ const ServerChannel = ({ channel, role, server }: Props) => {
     }
 
     return defaultConfirmInfo;
-  }, [confirm?.channel?.id, channel?.id]);
+  }, [channel?.id, confirm, params?.serverId]);
 
   const channelRedirect = () => {
     router.push(`/server/${params?.serverId}/channels/${channel?.id}`);
