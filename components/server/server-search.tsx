@@ -50,16 +50,21 @@ const ServerSearch = ({ items }: Props) => {
     id: string;
     type: Props["items"]["0"]["type"];
   }) => {
-    setOpen(false);
-    switch (type) {
-      case "channel":
-        router.push(`/servers/${params?.serverId}/conversations/${id}`);
-        break;
-      case "memeber":
-        router.push(`/servers/${params?.serverId}/channels/${id}`);
-        break;
-      default:
-        break;
+    try {
+      switch (type) {
+        case "channel":
+          router.push(`/server/${params?.serverId}/channels/${id}`);
+
+          break;
+        case "memeber":
+          router.push(`/server/${params?.serverId}/conversations/${id}`);
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+    } finally {
+      setOpen(false);
     }
   };
 
@@ -88,8 +93,14 @@ const ServerSearch = ({ items }: Props) => {
             return (
               <CommandGroup key={label} heading={label}>
                 {data?.map(({ icon, id, name }) => (
-                  <CommandItem onClick={() => onClick({ id, type })} key={id}>
-                    {icon} <span>{name}</span>
+                  <CommandItem key={id} className="cursor-pointer group">
+                    <p
+                      onClick={() => onClick({ id, type })}
+                      className="flex items-center gap-1"
+                    >
+                      {icon}
+                      <span className="group-hover:underline">{name}</span>
+                    </p>
                   </CommandItem>
                 ))}
               </CommandGroup>

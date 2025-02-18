@@ -55,7 +55,6 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   if (!profile) {
-    auth().redirectToSignIn();
     return {
       title: "Discord",
       openGraph: {
@@ -71,7 +70,7 @@ export async function generateMetadata(
   });
 
   const serverName = server?.name || "";
-  const title = serverName ? `${serverName} | Discord` : "Discord";
+  const title = `${serverName}`;
 
   return {
     title: title,

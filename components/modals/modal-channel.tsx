@@ -98,7 +98,7 @@ function ChannelModal() {
       form.setValue("type", type);
     }
     return () => form.reset();
-  }, [channel]);
+  }, [channel, form]);
 
   return (
     <Modal
